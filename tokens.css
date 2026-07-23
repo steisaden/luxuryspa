@@ -1,0 +1,55 @@
+/* Hallmark · macrostructure: Photographic · tone: meditative luxury · anchor hue: mineral teal */
+:root {
+  --color-deep-water: oklch(33% 0.052 196);
+  --color-deep-water-2: oklch(27% 0.042 196);
+  --color-mineral-water: oklch(61% 0.048 193);
+  --color-mineral-light: oklch(79% 0.035 190);
+  --color-steam-ivory: oklch(94% 0.018 84);
+  --color-towel-white: oklch(98% 0.01 84);
+  --color-sandstone: oklch(73% 0.045 73);
+  --color-eucalyptus: oklch(47% 0.061 132);
+  --color-oil-amber: oklch(61% 0.13 63);
+  --color-skin-clay: oklch(52% 0.078 43);
+  --color-ink: oklch(24% 0.021 172);
+  --color-quiet-ink: oklch(40% 0.021 172);
+  --color-error: oklch(46% 0.16 27);
+  --color-error-surface: oklch(92% 0.035 27);
+  --color-focus: oklch(76% 0.14 73);
+  --color-accent-ink: oklch(24% 0.021 172);
+
+  --font-display: "Bellefair", "Baskerville", serif;
+  --font-body: "Albert Sans Variable", "Avenir Next", sans-serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --space-10: 8rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: 1.25rem;
+  --text-lg: 1.563rem;
+  --text-xl: 1.953rem;
+  --text-2xl: 2.441rem;
+  --text-3xl: 3.052rem;
+  --text-display: clamp(3rem, 7vw + 0.5rem, 5.5rem);
+
+  --radius-hairline: 0.125rem;
+  --radius-control: 999px;
+  --nav-height: 4.5rem;
+  --rule-hairline: 1px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+}

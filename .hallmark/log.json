@@ -1,0 +1,30 @@
+{
+  "macrostructure": "Photographic",
+  "theme_strategy": "studied-DNA",
+  "theme_source": "Supplied luxury spa film: towel fibers, botanical oil, steam, eucalyptus, sandstone, mineral water",
+  "pre_emit_scores": {
+    "P": 5,
+    "H": 5,
+    "E": 5,
+    "S": 5,
+    "R": 5,
+    "V": 5
+  },
+  "assertions": {
+    "contrast": "Axe browser scan found no serious or critical violations on primary routes",
+    "sticky_navigation": "Fixed primary navigation has opaque translucent backing and active-route state",
+    "footer": "The Exhale material sequence and reconstruction archive link are present",
+    "claims": "No fabricated testimonials, metrics, customers, or external-delivery claims",
+    "responsive": "Browser tests cover mobile overflow and reduced-motion reflow",
+    "progressive_enhancement": "Primary links, chapter documents, film controls, and inquiry action have native fallbacks"
+  },
+  "detector_review": {
+    "source_findings": 0,
+    "intentional_exception": "cream-palette: towel ivory and warm steam are sampled from and documented against the supplied film",
+    "false_positives": [
+      "gradient-text: no background-clip declarations; gradients are solid-text legibility veils",
+      "marquee: no marquee element or marquee source exists",
+      "theater-slop-phrase: no theater or theatre phrase exists"
+    ]
+  }
+}

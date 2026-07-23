@@ -1,0 +1,46 @@
+<main id="app-shell" data-page="prompt" class="archive-shell">
+  <article id="main-content" class="archive" tabindex="-1">
+    <header class="archive__header">
+      <p class="material-line">Creative and technical record</p>
+      <h1>Reconstruction archive</h1>
+      <p>The complete source logic behind “The Exhale”: film language, subject-derived design decisions, progressive enhancement boundaries, and the prompt used to reconstruct the sequence.</p>
+    </header>
+
+    <nav class="archive__index" aria-label="On this page">
+      <a href="#source">Source</a><a href="#derivation">Derivation</a><a href="#architecture">Architecture</a><a href="#reconstruction">Prompt</a>
+    </nav>
+
+    <section id="source">
+      <h2>Source film</h2>
+      <dl class="archive-facts">
+        <div><dt>Format</dt><dd>H.264 video · AAC audio</dd></div>
+        <div><dt>Frame</dt><dd>1280 × 720 · 24 fps</dd></div>
+        <div><dt>Duration</dt><dd>10.005 seconds from media metadata</dd></div>
+        <div><dt>Continuity</dt><dd>One macro journey without editorial cuts</dd></div>
+      </dl>
+      <p>The implementation reads the duration from `loadedmetadata`; it does not force the eight-second estimate in the creative concept onto the actual ten-second media file.</p>
+    </section>
+
+    <section id="derivation">
+      <h2>Design derivation</h2>
+      <p>The palette moves from towel ivory and skin warmth into eucalyptus, sandstone, and deep mineral teal. Oil amber is reserved for active progress and focus. The display face echoes engraved resort wayfinding; the body face stays plain enough for procurement-oriented reading.</p>
+      <p>The page’s structural rule is descent and return. Dense macro imagery precedes spacious room-scale calm. Capsule controls borrow the geometry of droplets and ripples, while content regions remain architectural rather than becoming a stack of rounded spa cards.</p>
+    </section>
+
+    <section id="architecture">
+      <h2>Progressive architecture</h2>
+      <ul class="architecture-list">
+        <li><strong>Fastify</strong> owns routes, validation, full documents, and fragment responses.</li>
+        <li><strong>Nunjucks</strong> keeps page and fragment markup semantic and server-rendered.</li>
+        <li><strong>HTMX</strong> enhances navigation, chapter notes, and the inquiry form only.</li>
+        <li><strong>ScrollFilm</strong> maps ScrollTrigger progress to native video time with damped, decoder-aware seeking.</li>
+        <li><strong>Lenis and GSAP</strong> coordinate optional scroll feel and timelines, and are destroyed before HTMX swaps.</li>
+      </ul>
+    </section>
+
+    <section id="reconstruction" class="prompt-block">
+      {% include "fragments/reconstruction.njk" %}
+    </section>
+  </article>
+  <footer class="site-close site-close--archive"><p>The Exhale · reconstruction record</p><a href="{{ basePath }}/">Return to the experience</a></footer>
+</main>

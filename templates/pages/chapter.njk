@@ -1,0 +1,10 @@
+{% extends "layouts/base.njk" %}
+{% block title %}{{ chapter.title }} — The Exhale{% endblock %}
+{% block main %}
+<main id="app-shell" data-page="chapter" class="archive-shell">
+  <article id="main-content" class="single-note" tabindex="-1">
+    {% include "fragments/chapter.njk" %}
+    <a class="button button--dark" href="{{ basePath }}/#{{ chapter.slug }}">Return to the complete journey</a>
+  </article>
+</main>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "layouts/base.njk" %}
+{% block title %}Inquiry — The Exhale{% endblock %}
+{% block main %}
+<main id="app-shell" data-page="inquiry" class="archive-shell">
+  <section id="main-content" class="single-note" tabindex="-1">
+    {% include "fragments/inquiry-form.njk" %}
+    <a class="button button--dark" href="/#inquiry">Return to The Exhale</a>
+  </section>
+</main>
+{% endblock %}

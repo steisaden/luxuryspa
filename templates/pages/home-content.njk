@@ -1,0 +1,80 @@
+<main id="app-shell" data-page="home">
+  <section id="main-content" class="film-journey" data-scroll-film tabindex="-1">
+    <div class="film-plane" aria-hidden="false">
+      <video class="film-plane__video" data-film controls muted playsinline preload="auto" fetchpriority="high" poster="{{ basePath }}/media/spa-film-poster.jpg">
+        <source src="{{ basePath }}/media/spa-film.mp4" type="video/mp4">
+      </video>
+      <div class="film-plane__veil" aria-hidden="true"></div>
+      <div class="film-progress" aria-hidden="true"><span data-film-progress></span></div>
+    </div>
+
+    <article class="journey-copy">
+      <header class="hero chapter-panel chapter-panel--hero">
+        <p class="material-line">A continuous treatment concept</p>
+        <h1>Enter the quiet between moments.</h1>
+        <p class="hero__lede">A warmed towel. Botanical oil. Vapor, stone, and one undisturbed mineral pool. “The Exhale” turns the physical passage into a resort-spa experience.</p>
+        <a class="text-link" href="#inquiry">Request a private walkthrough</a>
+      </header>
+
+      {% for chapter in chapters %}
+      <section class="chapter-panel chapter-panel--{{ chapter.slug }}" id="{{ chapter.slug }}" data-film-chapter="{{ chapter.slug }}">
+        <div class="chapter-panel__copy">
+          <p class="material-line">{{ chapter.material }}</p>
+          <h2>{{ chapter.shortTitle }}</h2>
+          <p>{{ chapter.summary }}</p>
+          {% if staticMode %}
+          <a href="{{ basePath }}/chapters/{{ chapter.slug }}/">Read the material note</a>
+          {% else %}
+          <a href="/fragments/chapter/{{ chapter.slug }}" hx-get="/fragments/chapter/{{ chapter.slug }}" hx-target="#chapter-detail-{{ chapter.slug }}" hx-swap="innerHTML">Read the material note</a>
+          {% endif %}
+          <div id="chapter-detail-{{ chapter.slug }}" class="chapter-inline-detail" aria-live="polite"></div>
+        </div>
+      </section>
+      {% endfor %}
+    </article>
+  </section>
+
+  <section class="return" aria-labelledby="return-title">
+    <div class="return__statement">
+      <h2 id="return-title">Stillness, made tangible.</h2>
+      <p>The sequence closes where the commercial experience begins: a calm treatment room, a clear material language, and a guest ritual a resort team can evaluate through touch, pacing, and atmosphere.</p>
+    </div>
+    <dl class="treatment-flow">
+      <div><dt>Arrival</dt><dd>Woven heat and condensation establish care at the smallest scale.</dd></div>
+      <div><dt>Release</dt><dd>Oil and vapor extend touch into breath, scent, and space.</dd></div>
+      <div><dt>Immersion</dt><dd>Mineral water resolves the journey through one measured ripple.</dd></div>
+    </dl>
+  </section>
+
+  <section class="guided-tour" data-guided-tour aria-labelledby="tour-title">
+    <div>
+      <h2 id="tour-title">Replay at the film’s pace.</h2>
+    </div>
+    <div class="guided-tour__controls">
+      <button type="button" class="tour-button" data-tour-action="play" aria-pressed="false">Play from start</button>
+      <button type="button" class="tour-button" data-tour-action="pause">Pause</button>
+      <button type="button" class="tour-button is-active" data-tour-speed="1" aria-pressed="true">1× · 20s</button>
+      <button type="button" class="tour-button" data-tour-speed="2" aria-pressed="false">2× · 10s</button>
+    </div>
+    <p class="guided-tour__status" data-tour-status role="status" aria-live="polite">Ready for a 20-second guided descent.</p>
+  </section>
+
+  <section id="inquiry" class="inquiry" aria-labelledby="inquiry-title">
+    <div class="inquiry__intro">
+      <h2 id="inquiry-title">Shape a signature treatment journey.</h2>
+      <p>Explore how warmth, touch, vapor, and water could become an ownable guest ritual for your property. Share the property or group you represent to request a private walkthrough.</p>
+      {% if staticMode %}
+      <p class="inquiry__disclosure">This public Pages edition presents the complete concept without transmitting inquiry data.</p>
+      {% else %}
+      <p class="inquiry__disclosure">This demonstration validates the request on the server and confirms it here; external delivery is not connected.</p>
+      {% endif %}
+    </div>
+    {% include "fragments/inquiry-form.njk" %}
+  </section>
+
+  <footer class="site-close">
+    <p>The Exhale</p>
+    <p>Warmth · touch · vapor · water · return</p>
+    <a href="{{ basePath }}/prompt/">Read the reconstruction archive</a>
+  </footer>
+</main>

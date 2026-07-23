@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en" data-mount-count="0" data-active-lifecycles="0">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#173F42">
+  <meta name="description" content="The Exhale — a continuous macro wellness concept for resort decision-makers.">
+  <title>{% block title %}The Exhale — Luxury spa concept{% endblock %}</title>
+  {% for href in assets.styles %}<link rel="stylesheet" href="{{ href }}">{% endfor %}
+  <script type="module" src="{{ assets.script }}"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-nav" aria-label="Primary">
+    <a class="wordmark" href="{{ basePath }}/" aria-label="The Exhale home">The Exhale</a>
+    <nav class="site-nav__links"{% if not staticMode %} hx-boost="true" hx-target="#app-shell" hx-swap="outerHTML" hx-indicator="#nav-status"{% endif %}>
+      <a href="{{ basePath }}/"{% if page == 'home' %} aria-current="page"{% endif %}>Experience</a>
+      <a href="{{ basePath }}/prompt/"{% if page == 'prompt' %} aria-current="page"{% endif %}>Prompt archive</a>
+    </nav>
+    <span id="nav-status" class="nav-status htmx-indicator" aria-hidden="true">Loading</span>
+  </header>
+
+  {% block main %}{% endblock %}
+
+  <div id="global-status" class="sr-only" role="status" aria-live="polite"></div>
+  <noscript><p class="noscript-note">The complete experience is available without JavaScript. Film scroll synchronization and enhanced navigation are disabled.</p></noscript>
+</body>
+</html>

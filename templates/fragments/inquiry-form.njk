@@ -1,0 +1,52 @@
+<div id="inquiry-form">
+{% if success %}
+  <div class="form-success" tabindex="-1">
+    <p class="material-line">Request received</p>
+    <h3>Thank you, {{ values.name }}.</h3>
+    <p>This prototype has validated your request on the server. It has not sent data to an external inbox or CRM.</p>
+  </div>
+{% else %}
+  {% if errors and (errors.name or errors.email or errors.property) %}
+  <div class="form-errors" role="alert" tabindex="-1">
+    <p>Please correct the marked fields.</p>
+  </div>
+  {% endif %}
+  <form class="inquiry-form"{% if staticMode %} action="{{ basePath }}/#inquiry" aria-describedby="static-inquiry-note"{% else %} action="/inquiry" method="post" hx-post="/inquiry" hx-target="#inquiry-form" hx-swap="outerHTML" hx-indicator="#inquiry-loading"{% endif %} novalidate>
+    <div class="field{% if errors.name %} field--error{% endif %}">
+      <label for="name">Name</label>
+      <input id="name" name="name" autocomplete="name" required aria-required="true" value="{{ values.name | default('') }}"{% if errors.name %} aria-invalid="true" aria-describedby="name-error"{% endif %}>
+      <p class="field__message" id="name-error">{{ errors.name | default('') }}</p>
+    </div>
+    <div class="field{% if errors.email %} field--error{% endif %}">
+      <label for="email">Work email</label>
+      <input id="email" name="email" type="email" autocomplete="email" required aria-required="true" placeholder="name@property.com" value="{{ values.email | default('') }}"{% if errors.email %} aria-invalid="true" aria-describedby="email-error"{% endif %}>
+      <p class="field__message" id="email-error">{{ errors.email | default('') }}</p>
+    </div>
+    <div class="field field--wide{% if errors.property %} field--error{% endif %}">
+      <label for="property">Property or group</label>
+      <input id="property" name="property" autocomplete="organization" required aria-required="true" value="{{ values.property | default('') }}"{% if errors.property %} aria-invalid="true" aria-describedby="property-error"{% endif %}>
+      <p class="field__message" id="property-error">{{ errors.property | default('') }}</p>
+    </div>
+    <div class="field">
+      <label for="interest">Primary interest</label>
+      <select id="interest" name="interest">
+        <option value="Treatment concept"{% if values.interest == 'Treatment concept' %} selected{% endif %}>Treatment concept</option>
+        <option value="Guest experience"{% if values.interest == 'Guest experience' %} selected{% endif %}>Guest experience</option>
+        <option value="Creative production"{% if values.interest == 'Creative production' %} selected{% endif %}>Creative production</option>
+      </select>
+      <p class="field__message"></p>
+    </div>
+    <div class="field field--wide">
+      <label for="message">Context <span>(optional)</span></label>
+      <textarea id="message" name="message" rows="4">{{ values.message | default('') }}</textarea>
+      <p class="field__message"></p>
+    </div>
+    <button class="button button--primary" type="submit"{% if staticMode %} disabled aria-disabled="true"{% endif %}>Request a private walkthrough</button>
+    {% if staticMode %}
+    <p id="static-inquiry-note" class="inquiry__disclosure">This public Pages edition does not transmit inquiry data. The repository includes the complete Fastify validation flow for a server deployment.</p>
+    {% else %}
+    <span id="inquiry-loading" class="form-loading htmx-indicator" role="status">Sending securely…</span>
+    {% endif %}
+  </form>
+{% endif %}
+</div>
