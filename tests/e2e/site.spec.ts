@@ -58,6 +58,29 @@ test('mobile layout has no horizontal overflow', async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
+test('mobile chapter surfaces keep the film visible behind the copy', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This regression covers the narrow chapter treatment.');
+  await page.goto('/');
+
+  const styles = await page.locator('.chapter-panel:not(.chapter-panel--hero)').evaluateAll((panels) => (
+    panels.map((panel) => {
+      const copy = panel.querySelector<HTMLElement>('.chapter-panel__copy');
+      const background = copy ? getComputedStyle(copy).backgroundColor : '';
+      const alphaMatch = background.match(/\/\s*([\d.]+)\)/) ?? background.match(/rgba?\([^)]*,\s*([\d.]+)\)/);
+      const blurMatch = copy ? getComputedStyle(copy).backdropFilter.match(/blur\(([\d.]+)px\)/) : null;
+      return {
+        panelBackground: getComputedStyle(panel).backgroundColor,
+        alpha: Number.parseFloat(alphaMatch?.[1] ?? '1'),
+        blur: Number.parseFloat(blurMatch?.[1] ?? '0'),
+      };
+    })
+  ));
+
+  expect(styles.every(({ panelBackground }) => panelBackground === 'rgba(0, 0, 0, 0)')).toBe(true);
+  expect(Math.max(...styles.map(({ alpha }) => alpha))).toBeLessThanOrEqual(0.46);
+  expect(Math.max(...styles.map(({ blur }) => blur))).toBeLessThanOrEqual(3);
+});
+
 test('route transitions do not emit client errors', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => {

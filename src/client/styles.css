@@ -208,14 +208,15 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .chapter-panel__copy {
   padding: clamp(var(--space-5), 4vw, var(--space-7));
   border-block-start: var(--rule-hairline) solid color-mix(in oklch, var(--color-towel-white) 48%, transparent);
-  background: color-mix(in oklch, var(--color-deep-water-2) 74%, transparent);
-  backdrop-filter: blur(10px);
+  background: color-mix(in oklch, var(--color-deep-water-2) 46%, transparent);
+  backdrop-filter: blur(3px);
+  text-shadow: 0 1px 12px color-mix(in oklch, var(--color-deep-water-2) 82%, transparent);
 }
 
 .chapter-panel:nth-of-type(even) { justify-items: end; }
-.chapter-panel--oil .chapter-panel__copy { background: color-mix(in oklch, var(--color-skin-clay) 64%, transparent); }
-.chapter-panel--steam .chapter-panel__copy { background: color-mix(in oklch, var(--color-eucalyptus) 66%, transparent); }
-.chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water) 82%, transparent); }
+.chapter-panel--oil .chapter-panel__copy { background: color-mix(in oklch, var(--color-skin-clay) 42%, transparent); }
+.chapter-panel--steam .chapter-panel__copy { background: color-mix(in oklch, var(--color-eucalyptus) 42%, transparent); }
+.chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water) 46%, transparent); }
 
 .chapter-panel--hero {
   align-content: end;
@@ -465,6 +466,14 @@ textarea { -webkit-tap-highlight-color: transparent; }
 }
 
 @media (min-width: 40rem) {
+  .chapter-panel__copy {
+    background: color-mix(in oklch, var(--color-deep-water-2) 74%, transparent);
+    backdrop-filter: blur(10px);
+    text-shadow: none;
+  }
+  .chapter-panel--oil .chapter-panel__copy { background: color-mix(in oklch, var(--color-skin-clay) 64%, transparent); }
+  .chapter-panel--steam .chapter-panel__copy { background: color-mix(in oklch, var(--color-eucalyptus) 66%, transparent); }
+  .chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water) 82%, transparent); }
   .return,
   .inquiry { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
   .treatment-flow div { grid-template-columns: minmax(7rem, 0.35fr) minmax(0, 1fr); }
