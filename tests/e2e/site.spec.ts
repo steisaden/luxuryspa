@@ -63,6 +63,18 @@ test('mobile layout has no horizontal overflow', async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(1);
 });
 
+test('mobile film stays on a viewport layer without sticky promotion', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This regression covers the iOS mobile film layer.');
+  await page.goto('/');
+  const filmPlane = page.locator('.film-plane');
+  const experience = page.locator('.experience-canvas');
+
+  await expect(filmPlane).toHaveCSS('position', 'fixed');
+  await expect(experience).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
+  await page.evaluate(() => window.scrollTo(0, 1800));
+  await expect.poll(() => filmPlane.evaluate((element) => Math.round(element.getBoundingClientRect().top))).toBe(0);
+});
+
 test('mobile chapter surfaces keep the film visible behind the copy', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile', 'This regression covers the narrow chapter treatment.');
   await page.goto('/');
@@ -82,7 +94,8 @@ test('mobile chapter surfaces keep the film visible behind the copy', async ({ p
   ));
 
   expect(styles.every(({ panelBackground }) => panelBackground === 'rgba(0, 0, 0, 0)')).toBe(true);
-  expect(Math.max(...styles.map(({ alpha }) => alpha))).toBeLessThanOrEqual(0.46);
+  expect(Math.min(...styles.map(({ alpha }) => alpha))).toBeGreaterThanOrEqual(0.74);
+  expect(Math.max(...styles.map(({ alpha }) => alpha))).toBeLessThanOrEqual(0.76);
   expect(Math.max(...styles.map(({ blur }) => blur))).toBe(0);
 });
 

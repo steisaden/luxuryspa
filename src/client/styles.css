@@ -144,20 +144,23 @@ textarea { -webkit-tap-highlight-color: transparent; }
 
 .experience-canvas {
   position: relative;
-  background: var(--color-deep-water);
+  isolation: isolate;
+  background: transparent;
 }
 
 .film-journey {
   position: relative;
   z-index: 1;
-  margin-block-start: -100svh;
+  margin-block-start: 0;
   color: var(--color-towel-white);
 }
 
 .film-plane {
-  position: sticky;
-  inset-block-start: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
   block-size: 100svh;
+  block-size: 100dvh;
   overflow: clip;
   background: var(--color-deep-water-2);
 }
@@ -213,15 +216,15 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .chapter-panel__copy {
   padding: clamp(var(--space-5), 4vw, var(--space-7));
   border-block-start: var(--rule-hairline) solid color-mix(in oklch, var(--color-towel-white) 48%, transparent);
-  background: color-mix(in oklch, var(--color-deep-water-2) 46%, transparent);
+  background: color-mix(in oklch, var(--color-deep-water-2) 76%, transparent);
   backdrop-filter: none;
   text-shadow: 0 1px 12px color-mix(in oklch, var(--color-deep-water-2) 82%, transparent);
 }
 
 .chapter-panel:nth-of-type(even) { justify-items: end; }
-.chapter-panel--oil .chapter-panel__copy { background: color-mix(in oklch, var(--color-skin-clay) 42%, transparent); }
-.chapter-panel--steam .chapter-panel__copy { background: color-mix(in oklch, var(--color-eucalyptus) 42%, transparent); }
-.chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water) 46%, transparent); }
+.chapter-panel--oil .chapter-panel__copy,
+.chapter-panel--steam .chapter-panel__copy,
+.chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water-2) 76%, transparent); }
 
 .chapter-panel--hero {
   align-content: end;
@@ -384,7 +387,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .guided-tour__controls { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 .tour-button { background: transparent; color: inherit; }
 .tour-button.is-active { background: var(--color-steam-ivory); color: var(--color-deep-water); }
-.guided-tour__status { margin: 0; color: var(--color-mineral-light); }
+.guided-tour__status { margin: 0; color: var(--color-towel-white); }
 
 .site-close {
   display: flex;
@@ -474,6 +477,15 @@ textarea { -webkit-tap-highlight-color: transparent; }
 }
 
 @media (min-width: 40rem) {
+  .experience-canvas { background: var(--color-deep-water); }
+  .film-journey { margin-block-start: -100svh; }
+  .film-plane {
+    position: sticky;
+    inset: auto;
+    inset-block-start: 0;
+    z-index: auto;
+    block-size: 100svh;
+  }
   .chapter-panel__copy {
     background: color-mix(in oklch, var(--color-deep-water-2) 74%, transparent);
     backdrop-filter: blur(10px);
