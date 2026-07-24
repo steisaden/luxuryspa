@@ -163,6 +163,28 @@ test('mobile film recovers when a paused video frame callback stalls', async ({ 
   await expect.poll(() => film.evaluate((video: HTMLVideoElement) => video.currentTime)).toBeGreaterThan(0.5);
 });
 
+test('mobile film produces a decoded frame after scrolling settles', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This regression covers mobile video decoding.');
+  await page.goto('/');
+  const film = page.locator('[data-film]');
+  await expect.poll(() => film.evaluate((video: HTMLVideoElement) => video.duration)).toBeGreaterThan(0);
+
+  await page.evaluate(async () => {
+    for (let y = 100; y <= 2400; y += 100) {
+      window.scrollTo(0, y);
+      await new Promise((resolve) => window.setTimeout(resolve, 20));
+    }
+  });
+  await page.waitForTimeout(1000);
+
+  const decodeState = await film.evaluate((video: HTMLVideoElement) => ({
+    readyState: video.readyState,
+    seeking: video.seeking,
+  }));
+  expect(decodeState.readyState).toBeGreaterThanOrEqual(2);
+  expect(decodeState.seeking).toBe(false);
+});
+
 test('guided replay starts at the opening and pauses on manual input', async ({ page }) => {
   await page.goto('/');
   const controls = page.locator('[data-guided-tour]');
