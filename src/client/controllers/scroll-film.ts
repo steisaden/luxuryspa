@@ -26,6 +26,7 @@ export class ScrollFilmController implements MountableController {
   private trigger: ScrollTrigger | null = null;
   private animationFrame = 0;
   private videoFrame = 0;
+  private decoderWatchdog = 0;
   private duration = 0;
   private currentTime = 0;
   private targetTime = 0;
@@ -41,6 +42,16 @@ export class ScrollFilmController implements MountableController {
     this.targetTime = this.currentTime;
   };
 
+  private readonly releaseDecoder = () => {
+    if (this.decoderWatchdog) window.clearTimeout(this.decoderWatchdog);
+    this.decoderWatchdog = 0;
+    if (this.video && this.videoFrame && 'cancelVideoFrameCallback' in this.video) {
+      this.video.cancelVideoFrameCallback(this.videoFrame);
+    }
+    this.videoFrame = 0;
+    this.decoderReady = true;
+  };
+
   mount(root: ParentNode): void {
     const journey = root.querySelector<HTMLElement>('[data-scroll-film]');
     this.video = root.querySelector<HTMLVideoElement>('[data-film]');
@@ -51,6 +62,7 @@ export class ScrollFilmController implements MountableController {
     this.video.controls = this.reducedMotion.matches;
     this.video.pause();
     this.video.addEventListener('loadedmetadata', this.onMetadata);
+    this.video.addEventListener('seeked', this.releaseDecoder);
     if (this.video.readyState >= HTMLMediaElement.HAVE_METADATA) this.onMetadata();
 
     gsap.registerPlugin(ScrollTrigger);
@@ -83,14 +95,11 @@ export class ScrollFilmController implements MountableController {
       this.video.currentTime = safeSeekTarget(this.currentTime, this.duration);
 
       if ('requestVideoFrameCallback' in this.video) {
-        this.videoFrame = this.video.requestVideoFrameCallback(() => {
-          this.decoderReady = true;
-        });
+        this.videoFrame = this.video.requestVideoFrameCallback(this.releaseDecoder);
       } else {
-        requestAnimationFrame(() => {
-          this.decoderReady = true;
-        });
+        requestAnimationFrame(this.releaseDecoder);
       }
+      this.decoderWatchdog = window.setTimeout(this.releaseDecoder, 250);
     }
 
     this.animationFrame = requestAnimationFrame(this.tick);
@@ -101,10 +110,9 @@ export class ScrollFilmController implements MountableController {
     this.trigger?.kill();
     this.trigger = null;
     cancelAnimationFrame(this.animationFrame);
-    if (this.video && this.videoFrame && 'cancelVideoFrameCallback' in this.video) {
-      this.video.cancelVideoFrameCallback(this.videoFrame);
-    }
+    this.releaseDecoder();
     this.video?.removeEventListener('loadedmetadata', this.onMetadata);
+    this.video?.removeEventListener('seeked', this.releaseDecoder);
     this.video = null;
     this.progressElement = null;
     this.lastFrameTime = 0;

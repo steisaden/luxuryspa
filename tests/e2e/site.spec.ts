@@ -85,6 +85,34 @@ test('scroll progress advances the native film without request flooding', async 
   expect(filmRequests).toBeLessThan(10);
 });
 
+test('mobile film recovers when a paused video frame callback stalls', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This regression covers touch-oriented mobile playback.');
+  await page.addInitScript(() => {
+    Object.defineProperty(HTMLVideoElement.prototype, 'requestVideoFrameCallback', {
+      configurable: true,
+      value: () => 1,
+    });
+    Object.defineProperty(HTMLVideoElement.prototype, 'cancelVideoFrameCallback', {
+      configurable: true,
+      value: () => undefined,
+    });
+  });
+
+  await page.goto('/');
+  const film = page.locator('[data-film]');
+  await expect.poll(() => film.evaluate((video: HTMLVideoElement) => video.duration)).toBeGreaterThan(0);
+  await page.evaluate(async () => {
+    for (let y = 100; y <= 2400; y += 100) {
+      window.scrollTo(0, y);
+      await new Promise((resolve) => window.setTimeout(resolve, 20));
+    }
+  });
+  await expect.poll(() => page.locator('[data-film-progress]').evaluate((element) => (
+    Number.parseFloat(getComputedStyle(element).getPropertyValue('--film-progress'))
+  ))).toBeGreaterThan(0.75);
+  await expect.poll(() => film.evaluate((video: HTMLVideoElement) => video.currentTime)).toBeGreaterThan(0.5);
+});
+
 test('guided replay starts at the opening and pauses on manual input', async ({ page }) => {
   await page.goto('/');
   const controls = page.locator('[data-guided-tour]');
