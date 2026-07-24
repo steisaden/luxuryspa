@@ -12,6 +12,11 @@ test('navigates with HTMX and keeps one mounted lifecycle', async ({ page }) => 
   await expect(page.locator('html')).toHaveAttribute('data-active-lifecycles', '1');
 });
 
+test('home uses a cache-busted scroll-seekable film asset', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('[data-film] source')).toHaveAttribute('src', /\/media\/spa-film-scroll\.mp4$/);
+});
+
 test('submits and validates the inquiry accessibly', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Request a private walkthrough' }).click();
@@ -124,7 +129,7 @@ test('route transitions do not emit client errors', async ({ page }) => {
 test('scroll progress advances the native film without request flooding', async ({ page }) => {
   let filmRequests = 0;
   page.on('request', (request) => {
-    if (request.url().includes('/media/spa-film.mp4')) filmRequests += 1;
+    if (request.url().includes('/media/spa-film-scroll.mp4')) filmRequests += 1;
   });
 
   await page.goto('/');
