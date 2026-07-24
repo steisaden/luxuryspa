@@ -48,7 +48,8 @@ fs.writeFileSync(path.join(outputRoot, '.nojekyll'), '');
 const expectedPrefix = `${publicBasePath.replace(/\/$/, '')}/`;
 const assertions: Array<[boolean, string]> = [
   [home.includes(`href="${expectedPrefix}"`), 'home link uses the Pages base path'],
-  [home.includes(`src="${expectedPrefix}media/spa-film-all-intra.mp4"`), 'film uses the Pages base path'],
+  [home.includes(`poster="${expectedPrefix}media/spa-film-60fps-poster.jpg"`), 'poster uses the Pages base path'],
+  [home.includes(`src="${expectedPrefix}media/spa-film-60fps-all-intra.mp4"`), 'film uses the Pages base path'],
   [home.includes('id="static-inquiry-note"'), 'static inquiry limitation is disclosed'],
   [home.includes('disabled aria-disabled="true"'), 'static inquiry submit is disabled'],
 ];

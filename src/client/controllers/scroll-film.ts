@@ -27,9 +27,10 @@ export function quantizeSeekTarget(target: number, duration: number, frameRate: 
   return Math.round(clamped * frameRate) / frameRate;
 }
 
+export const FILM_FRAME_RATE = 60;
+
 export class ScrollFilmController implements MountableController {
-  private static readonly FRAME_RATE = 24;
-  private static readonly SEEK_THRESHOLD = (1 / ScrollFilmController.FRAME_RATE) * 0.75;
+  private static readonly SEEK_THRESHOLD = (1 / FILM_FRAME_RATE) * 0.75;
   private video: HTMLVideoElement | null = null;
   private progressElement: HTMLElement | null = null;
   private trigger: ScrollTrigger | null = null;
@@ -94,7 +95,7 @@ export class ScrollFilmController implements MountableController {
 
   private requestSeek(value: number): void {
     if (!this.video) return;
-    const next = quantizeSeekTarget(value, this.duration, ScrollFilmController.FRAME_RATE);
+    const next = quantizeSeekTarget(value, this.duration, FILM_FRAME_RATE);
     if (this.video.seeking) {
       this.pendingTime = next;
       return;
