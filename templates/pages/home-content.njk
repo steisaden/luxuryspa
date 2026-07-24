@@ -1,5 +1,5 @@
 <main id="app-shell" data-page="home">
-  <section id="main-content" class="film-journey" data-scroll-film tabindex="-1">
+  <div class="experience-canvas">
     <div class="film-plane" aria-hidden="false">
       <video class="film-plane__video" data-film controls muted playsinline preload="auto" fetchpriority="high" poster="{{ basePath }}/media/spa-film-poster.jpg">
         <source src="{{ basePath }}/media/spa-film.mp4" type="video/mp4">
@@ -8,6 +8,7 @@
       <div class="film-progress" aria-hidden="true"><span data-film-progress></span></div>
     </div>
 
+    <section id="main-content" class="film-journey" data-scroll-film tabindex="-1">
     <article class="journey-copy">
       <header class="hero chapter-panel chapter-panel--hero">
         <p class="material-line">A continuous treatment concept</p>
@@ -32,9 +33,9 @@
       </section>
       {% endfor %}
     </article>
-  </section>
+    </section>
 
-  <section class="return" aria-labelledby="return-title">
+    <section class="return" aria-labelledby="return-title">
     <div class="return__statement">
       <h2 id="return-title">Stillness, made tangible.</h2>
       <p>The sequence closes where the commercial experience begins: a calm treatment room, a clear material language, and a guest ritual a resort team can evaluate through touch, pacing, and atmosphere.</p>
@@ -44,9 +45,9 @@
       <div><dt>Release</dt><dd>Oil and vapor extend touch into breath, scent, and space.</dd></div>
       <div><dt>Immersion</dt><dd>Mineral water resolves the journey through one measured ripple.</dd></div>
     </dl>
-  </section>
+    </section>
 
-  <section class="guided-tour" data-guided-tour aria-labelledby="tour-title">
+    <section class="guided-tour" data-guided-tour aria-labelledby="tour-title">
     <div>
       <h2 id="tour-title">Replay at the film’s pace.</h2>
     </div>
@@ -57,9 +58,9 @@
       <button type="button" class="tour-button" data-tour-speed="2" aria-pressed="false">2× · 10s</button>
     </div>
     <p class="guided-tour__status" data-tour-status role="status" aria-live="polite">Ready for a 20-second guided descent.</p>
-  </section>
+    </section>
 
-  <section id="inquiry" class="inquiry" aria-labelledby="inquiry-title">
+    <section id="inquiry" class="inquiry" aria-labelledby="inquiry-title">
     <div class="inquiry__intro">
       <h2 id="inquiry-title">Shape a signature treatment journey.</h2>
       <p>Explore how warmth, touch, vapor, and water could become an ownable guest ritual for your property. Share the property or group you represent to request a private walkthrough.</p>
@@ -70,11 +71,12 @@
       {% endif %}
     </div>
     {% include "fragments/inquiry-form.njk" %}
-  </section>
+    </section>
 
-  <footer class="site-close">
-    <p>The Exhale</p>
-    <p>Warmth · touch · vapor · water · return</p>
-    <a href="{{ basePath }}/prompt/">Read the reconstruction archive</a>
-  </footer>
+    <footer class="site-close">
+      <p>The Exhale</p>
+      <p>Warmth · touch · vapor · water · return</p>
+      <a href="{{ basePath }}/prompt/">Read the reconstruction archive</a>
+    </footer>
+  </div>
 </main>

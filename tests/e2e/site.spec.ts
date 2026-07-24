@@ -81,6 +81,31 @@ test('mobile chapter surfaces keep the film visible behind the copy', async ({ p
   expect(Math.max(...styles.map(({ blur }) => blur))).toBeLessThanOrEqual(3);
 });
 
+test('mobile keeps the film visible behind the complete home experience', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile', 'This regression covers the mobile film canvas.');
+  await page.goto('/');
+
+  for (const selector of ['.return', '.guided-tour', '.inquiry', '.site-close']) {
+    const section = page.locator(selector);
+    await section.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(100);
+
+    const state = await section.evaluate((element) => {
+      const video = document.querySelector<HTMLVideoElement>('[data-film]');
+      const videoRect = video?.getBoundingClientRect();
+      const background = getComputedStyle(element).backgroundColor;
+      const alphaMatch = background.match(/\/\s*([\d.]+)\)/) ?? background.match(/rgba?\([^)]*,\s*([\d.]+)\)/);
+      return {
+        filmVisible: Boolean(videoRect && videoRect.bottom > 0 && videoRect.top < window.innerHeight),
+        surfaceAlpha: Number.parseFloat(alphaMatch?.[1] ?? '1'),
+      };
+    });
+
+    expect(state.filmVisible, `${selector} should retain the film plane`).toBe(true);
+    expect(state.surfaceAlpha, `${selector} should reveal the film`).toBeLessThanOrEqual(0.78);
+  }
+});
+
 test('route transitions do not emit client errors', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => {

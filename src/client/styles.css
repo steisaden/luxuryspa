@@ -142,9 +142,15 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .htmx-request .htmx-indicator,
 .htmx-request.htmx-indicator { opacity: 1; }
 
-.film-journey {
+.experience-canvas {
   position: relative;
   background: var(--color-deep-water);
+}
+
+.film-journey {
+  position: relative;
+  z-index: 1;
+  margin-block-start: -100svh;
   color: var(--color-towel-white);
 }
 
@@ -190,7 +196,6 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .journey-copy {
   position: relative;
   z-index: 1;
-  margin-block-start: -100svh;
 }
 
 .chapter-panel {
@@ -247,14 +252,17 @@ textarea { -webkit-tap-highlight-color: transparent; }
 .inquiry,
 .guided-tour,
 .site-close {
+  position: relative;
+  z-index: 1;
   padding-inline: clamp(var(--space-4), 7vw, var(--space-10));
+  backdrop-filter: blur(3px);
 }
 
 .return {
   display: grid;
   gap: var(--space-8);
   padding-block: var(--space-10);
-  background: var(--color-steam-ivory);
+  background: color-mix(in oklch, var(--color-steam-ivory) 74%, transparent);
   color: var(--color-ink);
 }
 
@@ -276,7 +284,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
   display: grid;
   gap: var(--space-8);
   padding-block: var(--space-10);
-  background: var(--color-sandstone);
+  background: color-mix(in oklch, var(--color-sandstone) 76%, transparent);
   color: var(--color-ink);
 }
 
@@ -370,7 +378,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
   display: grid;
   gap: var(--space-6);
   padding-block: var(--space-8);
-  background: var(--color-deep-water);
+  background: color-mix(in oklch, var(--color-deep-water) 72%, transparent);
   color: var(--color-towel-white);
 }
 .guided-tour__controls { display: flex; flex-wrap: wrap; gap: var(--space-2); }
@@ -384,7 +392,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
   gap: var(--space-4);
   padding-block: var(--space-7);
   border-block-start: var(--rule-hairline) solid var(--color-mineral-water);
-  background: var(--color-deep-water-2);
+  background: color-mix(in oklch, var(--color-deep-water-2) 76%, transparent);
   color: var(--color-towel-white);
 }
 .site-close p { margin: 0; }
@@ -474,6 +482,14 @@ textarea { -webkit-tap-highlight-color: transparent; }
   .chapter-panel--oil .chapter-panel__copy { background: color-mix(in oklch, var(--color-skin-clay) 64%, transparent); }
   .chapter-panel--steam .chapter-panel__copy { background: color-mix(in oklch, var(--color-eucalyptus) 66%, transparent); }
   .chapter-panel--water .chapter-panel__copy { background: color-mix(in oklch, var(--color-deep-water) 82%, transparent); }
+  .return { background: var(--color-steam-ivory); }
+  .guided-tour { background: var(--color-deep-water); }
+  .inquiry { background: var(--color-sandstone); }
+  .site-close { background: var(--color-deep-water-2); }
+  .return,
+  .guided-tour,
+  .inquiry,
+  .site-close { backdrop-filter: none; }
   .return,
   .inquiry { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); }
   .treatment-flow div { grid-template-columns: minmax(7rem, 0.35fr) minmax(0, 1fr); }
