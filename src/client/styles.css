@@ -214,7 +214,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
   padding: clamp(var(--space-5), 4vw, var(--space-7));
   border-block-start: var(--rule-hairline) solid color-mix(in oklch, var(--color-towel-white) 48%, transparent);
   background: color-mix(in oklch, var(--color-deep-water-2) 46%, transparent);
-  backdrop-filter: blur(3px);
+  backdrop-filter: none;
   text-shadow: 0 1px 12px color-mix(in oklch, var(--color-deep-water-2) 82%, transparent);
 }
 
@@ -255,7 +255,7 @@ textarea { -webkit-tap-highlight-color: transparent; }
   position: relative;
   z-index: 1;
   padding-inline: clamp(var(--space-4), 7vw, var(--space-10));
-  backdrop-filter: blur(3px);
+  backdrop-filter: none;
 }
 
 .return {

@@ -78,7 +78,7 @@ test('mobile chapter surfaces keep the film visible behind the copy', async ({ p
 
   expect(styles.every(({ panelBackground }) => panelBackground === 'rgba(0, 0, 0, 0)')).toBe(true);
   expect(Math.max(...styles.map(({ alpha }) => alpha))).toBeLessThanOrEqual(0.46);
-  expect(Math.max(...styles.map(({ blur }) => blur))).toBeLessThanOrEqual(3);
+  expect(Math.max(...styles.map(({ blur }) => blur))).toBe(0);
 });
 
 test('mobile keeps the film visible behind the complete home experience', async ({ page }, testInfo) => {
@@ -98,11 +98,13 @@ test('mobile keeps the film visible behind the complete home experience', async 
       return {
         filmVisible: Boolean(videoRect && videoRect.bottom > 0 && videoRect.top < window.innerHeight),
         surfaceAlpha: Number.parseFloat(alphaMatch?.[1] ?? '1'),
+        backdropFilter: getComputedStyle(element).backdropFilter,
       };
     });
 
     expect(state.filmVisible, `${selector} should retain the film plane`).toBe(true);
     expect(state.surfaceAlpha, `${selector} should reveal the film`).toBeLessThanOrEqual(0.78);
+    expect(state.backdropFilter, `${selector} should not flatten the mobile video layer`).toBe('none');
   }
 });
 
