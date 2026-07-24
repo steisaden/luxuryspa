@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { clampProgress, dampPlayhead, safeSeekTarget } from '../src/client/controllers/scroll-film.js';
+import { clampProgress, dampPlayhead, quantizeSeekTarget, safeSeekTarget } from '../src/client/controllers/scroll-film.js';
 
 describe('scroll-film math', () => {
   it('clamps normalized progress', () => {
@@ -20,5 +20,11 @@ describe('scroll-film math', () => {
   it('keeps seek targets inside decodable media bounds', () => {
     expect(safeSeekTarget(12, 10)).toBeLessThan(10);
     expect(safeSeekTarget(-1, 10)).toBe(0);
+  });
+
+  it('quantizes seek targets to exact source frames', () => {
+    expect(quantizeSeekTarget(1.041, 10, 24)).toBe(1.0416666666666667);
+    expect(quantizeSeekTarget(10, 10, 24)).toBe(9.958333333333334);
+    expect(quantizeSeekTarget(-1, 10, 24)).toBe(0);
   });
 });

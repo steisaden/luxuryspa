@@ -20,18 +20,25 @@ export function safeSeekTarget(target: number, duration: number): number {
   return Math.min(Math.max(0, duration - 0.001), Math.max(0, target));
 }
 
+export function quantizeSeekTarget(target: number, duration: number, frameRate: number): number {
+  if (!Number.isFinite(duration) || duration <= 0 || !Number.isFinite(frameRate) || frameRate <= 0) return 0;
+  const frameDuration = 1 / frameRate;
+  const clamped = Math.min(Math.max(0, duration - frameDuration), Math.max(0, target));
+  return Math.round(clamped * frameRate) / frameRate;
+}
+
 export class ScrollFilmController implements MountableController {
+  private static readonly FRAME_RATE = 24;
+  private static readonly SEEK_THRESHOLD = (1 / ScrollFilmController.FRAME_RATE) * 0.75;
   private video: HTMLVideoElement | null = null;
   private progressElement: HTMLElement | null = null;
   private trigger: ScrollTrigger | null = null;
   private animationFrame = 0;
-  private videoFrame = 0;
-  private decoderWatchdog = 0;
   private duration = 0;
   private currentTime = 0;
   private targetTime = 0;
+  private pendingTime: number | null = null;
   private lastFrameTime = 0;
-  private decoderReady = true;
   private mounted = false;
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -42,16 +49,6 @@ export class ScrollFilmController implements MountableController {
     this.targetTime = this.currentTime;
   };
 
-  private readonly releaseDecoder = () => {
-    if (this.decoderWatchdog) window.clearTimeout(this.decoderWatchdog);
-    this.decoderWatchdog = 0;
-    if (this.video && this.videoFrame && 'cancelVideoFrameCallback' in this.video) {
-      this.video.cancelVideoFrameCallback(this.videoFrame);
-    }
-    this.videoFrame = 0;
-    this.decoderReady = true;
-  };
-
   mount(root: ParentNode): void {
     const journey = root.querySelector<HTMLElement>('[data-scroll-film]');
     this.video = root.querySelector<HTMLVideoElement>('[data-film]');
@@ -60,9 +57,8 @@ export class ScrollFilmController implements MountableController {
 
     this.mounted = true;
     this.video.controls = this.reducedMotion.matches;
-    this.video.pause();
     this.video.addEventListener('loadedmetadata', this.onMetadata);
-    this.video.addEventListener('seeked', this.releaseDecoder);
+    this.video.addEventListener('seeked', this.onSeeked);
     if (this.video.readyState >= HTMLMediaElement.HAVE_METADATA) this.onMetadata();
 
     gsap.registerPlugin(ScrollTrigger);
@@ -89,20 +85,29 @@ export class ScrollFilmController implements MountableController {
     this.lastFrameTime = now;
     this.currentTime = dampPlayhead(this.currentTime, this.targetTime, deltaSeconds);
 
-    const frameThreshold = 1 / 48;
-    if (this.decoderReady && !this.video.seeking && Math.abs(this.video.currentTime - this.currentTime) >= frameThreshold) {
-      this.decoderReady = false;
-      this.video.currentTime = safeSeekTarget(this.currentTime, this.duration);
-
-      if ('requestVideoFrameCallback' in this.video) {
-        this.videoFrame = this.video.requestVideoFrameCallback(this.releaseDecoder);
-      } else {
-        requestAnimationFrame(this.releaseDecoder);
-      }
-      this.decoderWatchdog = window.setTimeout(this.releaseDecoder, 250);
+    if (Math.abs(this.video.currentTime - this.currentTime) >= ScrollFilmController.SEEK_THRESHOLD) {
+      this.requestSeek(this.currentTime);
     }
 
     this.animationFrame = requestAnimationFrame(this.tick);
+  };
+
+  private requestSeek(value: number): void {
+    if (!this.video) return;
+    const next = quantizeSeekTarget(value, this.duration, ScrollFilmController.FRAME_RATE);
+    if (this.video.seeking) {
+      this.pendingTime = next;
+      return;
+    }
+    this.pendingTime = null;
+    this.video.currentTime = next;
+  }
+
+  private readonly onSeeked = () => {
+    if (!this.video || this.pendingTime === null) return;
+    const next = this.pendingTime;
+    this.pendingTime = null;
+    if (Math.abs(this.video.currentTime - next) >= ScrollFilmController.SEEK_THRESHOLD) this.requestSeek(next);
   };
 
   destroy(): void {
@@ -110,12 +115,11 @@ export class ScrollFilmController implements MountableController {
     this.trigger?.kill();
     this.trigger = null;
     cancelAnimationFrame(this.animationFrame);
-    this.releaseDecoder();
     this.video?.removeEventListener('loadedmetadata', this.onMetadata);
-    this.video?.removeEventListener('seeked', this.releaseDecoder);
+    this.video?.removeEventListener('seeked', this.onSeeked);
     this.video = null;
     this.progressElement = null;
+    this.pendingTime = null;
     this.lastFrameTime = 0;
-    this.decoderReady = true;
   }
 }
